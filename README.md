@@ -1,1 +1,1 @@
-# SP
+# SPOJ Solutions
