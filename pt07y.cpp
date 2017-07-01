@@ -1,35 +1,51 @@
 #include <bits/stdc++.h>
 using namespace std;
+#define ll long long
 
-void dfs (vector < list <int> > graph , int src){
-    vector <bool> visited(graph.size(), false);
-    stack <int> s;
+// simply doing dfs to find cycle in the graph
+ll u , v , n , m;
+vector <ll> graph[10002];
+
+bool dfs(vector <ll> graph[] , ll src){
+    bool nodevisited[n+1];
+    for(int i = 0; i < n+1; i++)
+        nodevisited[i] = false;
+    stack <ll> s;
     s.push(src);
-    visited[src] = true;
+    ll index , temp , check = 0;
     while(!s.empty()){
-        int vertex = s.top();
+        check++;
+        index = s.top();
         s.pop();
-        cout << vertex << "  ";
-        for(list <int> :: iterator it = graph[vertex].begin(); it != graph[vertex].end(); it++){
-            if(!visited[*it]){
-                s.push(*it);
-                visited[*it] = true;
+        if(nodevisited[index])
+            return false;       // node is already visited
+        else{
+            nodevisited[index] = true;
+            for(int i = 0; i < graph[index].size(); i++){
+                temp = graph[index][i];
+                s.push(temp);
             }
         }
     }
+    if(check != n)  
+        return false;
+    else    
+        return true;
 }
 
 int main(){
-    vector < list <int> > graph;
-    int v , e , src , des;
-    cin >> v >> e;
-    graph.resize(v);
-    while(e--){
-        cin >> src >> des;
-        graph[src].push_back(des);
-        graph[des].push_back(src);
+    cin >> n >> m;
+    ll t = m;
+    while(t--){
+        cin >> u >> v;
+        graph[u].push_back(v);
     }
-    cin >> src;
-    dfs(graph, src);
+    // dfs from node 1
+    // no of nodes + 1 = no of edges
+    if(dfs(graph,1) && m+1 == n)
+        cout << "YES\n";
+    else 
+        cout << "NO\n";
+    
     return 0;
 }
